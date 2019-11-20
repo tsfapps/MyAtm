@@ -24,47 +24,55 @@ class MainActivity : AppCompatActivity() {
 
 
         btnWithdraw.setOnClickListener{
-            tvMoney.text = ""
-            val inputValue: String = etAmount.text.toString()
-            number = inputValue.toInt()
-            if (inputValue == null || inputValue.trim()==""){
-                Toast.makeText(this,"please input data, edit text cannot be blank",Toast.LENGTH_LONG).show()
-            }else if (number>15000)
-            {
-                Toast.makeText(this,"ATM Cash Limit exceeds.",Toast.LENGTH_LONG).show()
-            }else if(number%100!=0){
-                Toast.makeText(this,"Please insert valid amount",Toast.LENGTH_LONG).show()
-            }
-            else {
 
-                val notes = intArrayOf(100, 200, 500, 2000)
-                val amount: Int = number
+                tvMoney.text = ""
 
-                val hashMap = HashMap<String, Int>()
-                if (hasLowestDenomination(notes, 0, notes.size, amount, hashMap)) {
-                    for (i in 0..2) {
-                        val n = hashMap[notes[i].toString()]!!
-                        if (n * notes[i] >= notes[i + 1]) {
-                            hashMap.replace(
-                                notes[i].toString(),
-                                n * notes[i] / notes[i + 1]
-                            )
-                            hashMap.replace(
-                                notes[i + 1].toString(),
-                                hashMap[notes[i + 1].toString()]!! + n * notes[i] / notes[i + 1]
-                            )
+            if (etAmount.text.toString() != "") {
+                val inputValue: String = etAmount.text.toString()
+                number = inputValue.toInt()
+                if (inputValue == null || inputValue.trim() == "") {
+                    Toast.makeText(
+                        this,
+                        "please input data, edit text cannot be blank",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else if (number > 15000) {
+                    Toast.makeText(this, "ATM Cash Limit exceeds.", Toast.LENGTH_LONG).show()
+                } else if (number % 100 != 0) {
+                    Toast.makeText(this, "Please insert valid amount", Toast.LENGTH_LONG).show()
+                } else {
+
+                    val notes = intArrayOf(100, 200, 500, 2000)
+                    val amount: Int = number
+
+                    val hashMap = HashMap<String, Int>()
+                    if (hasLowestDenomination(notes, 0, notes.size, amount, hashMap)) {
+                        for (i in 0..2) {
+                            val n = hashMap[notes[i].toString()]!!
+                            if (n * notes[i] >= notes[i + 1]) {
+                                hashMap.replace(
+                                    notes[i].toString(),
+                                    n * notes[i] / notes[i + 1]
+                                )
+                                hashMap.replace(
+                                    notes[i + 1].toString(),
+                                    hashMap[notes[i + 1].toString()]!! + n * notes[i] / notes[i + 1]
+                                )
+                            }
+                        }
+                        for ((key, value) in hashMap) {
+                            if (value == 1 || value == 0) {
+                                tvMoney.append("$value note of Rs.$key\n")
+                            } else {
+                                tvMoney.append("$value note of Rs.$key\n")
+                                println("$value notes of Rs.$key")
+                            }
                         }
                     }
-                    for ((key, value) in hashMap) {
-                        if (value == 1 || value == 0) {
-                            tvMoney.append("$value note of Rs.$key\n")
-                        } else {
-                            tvMoney.append("$value note of Rs.$key\n")
-                            println("$value notes of Rs.$key")
-                        }
-                    }
+
                 }
-
+            }else{
+                Toast.makeText(this,"please enter the amount", Toast.LENGTH_LONG).show()
             }
         }
     }
